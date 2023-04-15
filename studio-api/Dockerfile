@@ -14,6 +14,7 @@ COPY . ./
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update
 RUN apt-get -y install enchant-2
+RUN apt-get -y install ffmpeg
 
 # Run the web service on container startup. Here we use the gunicorn
 # webserver, with one worker process and 8 threads.
