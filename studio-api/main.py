@@ -135,7 +135,7 @@ def metrics():
 
     jargon_counts = dict(sorted(jargon_counts.items(), key=lambda x: x[1], reverse=True))
 
-    return {'filler_words': overall_filler_words_counts, 'jargon': jargon_counts}
+    return {'filler_words': overall_filler_words_counts, 'jargon': jargon_counts, "filler_words_total": sum(overall_filler_words_counts.values()), "jargon_total": sum(jargon_counts.values())}
 
 @app.route("/transcribe", methods = ["POST"])
 def transcribe():
