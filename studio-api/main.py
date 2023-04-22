@@ -1,8 +1,13 @@
 import os
 
 from flask import Flask, request, Response
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 
+from torch.utils.data import DataLoader
 import re, string
+import pandas as pd
+
+from model_code import *
 
 from nltk.corpus import words, wordnet 
 import nltk
@@ -17,9 +22,7 @@ import enchant
 
 app = Flask(__name__)
 
-
 import whisper
-whisper_model = whisper.load_model("base")
 
 import torch
 import datasets
@@ -32,42 +35,8 @@ from transformers import (
     DataCollatorForSeq2Seq,
 )
 
-model_name = "sshleifer/distilbart-xsum-12-3"
-
-summarization_model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-summarization_model.load_state_dict(torch.load("./model/model.pth", map_location=torch.device('cpu')))
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-encoder_max_length = 256
-decoder_max_length = 64
-
 #device = "cuda" if torch.cuda.is_available() else "cpu"
 #summarization_model = summarization_model.to(device)
-
-def generate_inference_summary(test_samples, model):
-    inputs = tokenizer(
-        test_samples,
-        padding="max_length",
-        truncation=True,
-        max_length=encoder_max_length,
-        return_tensors="pt",
-    )
-    input_ids = inputs.input_ids#.to(model.device)
-    attention_mask = inputs.attention_mask#.to(model.device)
-    outputs = model.generate(input_ids, attention_mask=attention_mask)
-    output_str = tokenizer.batch_decode(outputs, skip_special_tokens=True)
-    return outputs, output_str
-
-def get_input_sentences(start_idx, full_text):
-  # Get whole sentences up to X chars; don't break sentences up
-  # found empirically that 1024 chars is less than 256 tokens which is good
-  end_idx = start_idx + 1024
-  text = full_text[start_idx:end_idx]
-  end_sentence_chars = [".", "?", "!"]
-  next_start_idx = end_idx
-  while text[-1] not in end_sentence_chars and end_idx < len(full_text):
-      text = text[:-1]
-      next_start_idx -= 1
-  return text, next_start_idx
 
 @app.route("/isalive")
 def is_alive():
@@ -139,6 +108,7 @@ def metrics():
 
 @app.route("/transcribe", methods = ["POST"])
 def transcribe():
+    whisper_model = whisper.load_model("base")
     audio_file = request.files['audio_file']
     audio_file.save("temp.mp3")
     result = whisper_model.transcribe("temp.mp3")
@@ -148,23 +118,48 @@ def transcribe():
 @app.route("/summarize", methods= ["POST"])
 def summarize():
     json_data = request.get_json()
-    text = json_data['transcript']
+    my_input_text = json_data['transcript']
+
+    model_name = "t5-base"
+
+    summarization_model = T5ForConditionalGeneration.from_pretrained(model_name)
+    summarization_model.load_state_dict(torch.load("./model/t5-model-v3.pth", map_location=torch.device('cpu')))
+    tokenizer = T5Tokenizer.from_pretrained(model_name)
+
+    my_data = pd.DataFrame(columns=['ctext', 'text'])
 
     start = 0
     input_text = []
-    summarized_text = []
-    while start < len(text):
-        input, start = get_input_sentences(start, text)
+    while start < len(my_input_text):
+        input, start = get_input_sentences(start, my_input_text)
         input_text.append(input)
         #print("input text \n" + input)
-        out = generate_inference_summary(input, summarization_model)[1]
-        #print("Summarized text\n", out)
-        summarized_text.append(out)
+
+    for i, input in enumerate(input_text):
+        my_data.loc[i] = ["summarize: " + input, input]
+
+    my_data = CustomDataset(my_data, tokenizer, 512, 50)
+
+    val_params = {
+        'batch_size': 4,
+        'shuffle': False,
+        'num_workers': 0
+    }
+
+    my_data_loader = DataLoader(my_data, **val_params)
+
+    predictions, actuals = inference(0, tokenizer, summarization_model, 'cpu', my_data_loader)
+    final_df = pd.DataFrame({'Generated Text':predictions,'Actual Text':actuals})
 
     summary = ""
-    for x in summarized_text:
-        for y in x:
-            summary += y
+    for i, x in enumerate(final_df["Generated Text"]):
+        x = x[0].upper() + x[1:]
+        if x[0] != " " and i != 0:
+            summary = summary + " " + x
+        else:
+            summary += x
+
+    #summary = ' '.join(final_df["Generated Text"].astype(str))
 
     return summary
 
