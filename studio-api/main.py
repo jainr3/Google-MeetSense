@@ -35,6 +35,9 @@ from transformers import (
     DataCollatorForSeq2Seq,
 )
 
+import random
+import librosa
+
 #device = "cuda" if torch.cuda.is_available() else "cpu"
 #summarization_model = summarization_model.to(device)
 
@@ -113,7 +116,9 @@ def transcribe():
     audio_file.save("temp.mp3")
     result = whisper_model.transcribe("temp.mp3")
 
-    return result["text"]
+    duration = int(librosa.get_duration(filename='temp.mp3')) // 60
+
+    return {"transcript": result["text"], "duration": duration}
 
 @app.route("/summarize", methods= ["POST"])
 def summarize():
@@ -162,6 +167,119 @@ def summarize():
     #summary = ' '.join(final_df["Generated Text"].astype(str))
 
     return summary
+
+@app.route("/syntheticData", methods= ["POST"])
+def synthetic_data():
+    # meeting duration is actual real data
+    meeting_duration = request.args.get('duration', default = 28, type = int)
+
+    possible_meeting_titles = ["Strategy Session", "Brainstorming Meeting", "Project Planning Meeting",
+                               "Progress Review Meeting", "Performance Evaluation Meeting", "Team Building Meeting",
+                               "Budget Review Meeting", "Sales Forecast Meeting", "Product Development Meeting",
+                               "Customer Feedback Meeting", "Risk Assessment Meeting", "Crisis Management Meeting",
+                               "Innovation Workshop", "Marketing Campaign Meeting", "Quality Assurance Meeting", 
+                               "Talent Acquisition Meeting", "Vendor Negotiation Meeting", "Stakeholder Engagement Meeting",
+                               "Quarterly Business Review Meeting", "Employee Training Meeting", "Board of Directors Meeting",
+                               "Investor Relations Meeting", "Supply Chain Management Meeting", "Social Media Strategy Meeting",
+                               "Partnership Development Meeting"]
+    meeting_title = random.choice(possible_meeting_titles)
+
+    if random.randint(0, 1) == 0:
+        m_time_hr = random.randint(7, 10)
+        meeting_time = str(m_time_hr) + ":00 AM EST" 
+    else:
+        m_time_hr = random.randint(1, 6)
+        meeting_time = str(m_time_hr) + ":00 PM EST"
+
+    meeting_reoccuring = random.choice(["Yes", "No"])
+
+    # TODO: figure out what DB image urls these people will get...
+    engineering = {"Olivia Johnson": ("Engineering", ""),
+                   "Ethan Smith": ("Engineering", ""),
+                   "Chloe Rodriguez": ("Engineering", ""),
+                   "William Kim": ("Engineering", ""),
+                   "Ava Patel": ("Engineering", ""),}
+    product = {"James Lee": ("Product", ""), 
+               "Sophia Nguyen": ("Product", ""),  
+               "Benjamin Garcia": ("Product", ""), 
+               "Mia Brown": ("Product", ""),  
+               "Alexander Davis": ("Product", "")}
+    design = {"Isabella Robinson": ("Design", ""), 
+              "Samuel Wright": ("Design", ""),
+              "Charlotte Hernandez": ("Design", ""),
+              "Michael Cooper": ("Design", ""),
+              "Amelia Green": ("Design", "")}
+    management = {"John Smith": ("Management", ""),
+                  "Natalie Parker": ("Management", ""),
+                  "Christopher Taylor": ("Management", ""),
+                  "Grace Martinez": ("Management", ""),
+                  "Jonathan Scott": ("Management", ""),}
+    
+    # select some from each bucket... 1-3 per type
+    attendees = {}
+    engineering_selected = random.choices(list(engineering.keys()), k=random.randint(1, 3))
+    product_selected = random.choices(list(product.keys()), k=random.randint(1, 3))
+    design_selected = random.choices(list(design.keys()), k=random.randint(1, 3))
+    management_selected = random.choices(list(management.keys()), k=random.randint(1, 3))
+    for n in engineering_selected:
+        attendees[n] = engineering[n]
+    for n in product_selected:
+        attendees[n] = product[n]
+    for n in design_selected:
+        attendees[n] = design[n]
+    for n in management_selected:
+        attendees[n] = management[n]
+
+    total_participants = len(attendees)
+    work_category = 3 # TODO what is this field
+    types_of_roles = 4 # always at least 1 of the role
+
+    num_late = random.randint(1, total_participants // 2) - 1
+    late_str = "Late by " + str(random.randint(3, 9)) + " mins" if num_late != 0 else "On time"
+
+    attendee_punctuality = (num_late, late_str)
+
+    durs = [10, 15, 20, 30, 45, 60]
+    durs_2 = [meeting_duration-x for x in durs]
+    durs_3 = 9999
+    for x in durs_2:
+        if abs(x) < durs_3:
+            durs_3 = x
+
+    if meeting_duration in durs:
+        meeting_duration_analysis = "Meeting on time"
+    elif durs_3 > 0:
+        meeting_duration_analysis = "Over by " + str(abs(durs_3)) + " mins"
+    else:
+        meeting_duration_analysis = "Under by " + str(abs(durs_3)) + " mins"
+
+    # chat log
+    example_chats = ["Hi everyone! Glad to see you all here.", 
+                     "Hi there! Good to be here.",
+                     "Hey everyone, good morning.",
+                     "Hi folks!", "Hello", "Hey", "Howdy",
+                     "Can you hear me?", "Sorry I'll be right back",
+                     "Brb", "All good?", "Good morning"]
+    chat_log = []
+    m_time_min = 1
+    for p in attendees.keys():
+        if random.randint(0, 2) == 0:
+            chat_log.append("(" + str(m_time_hr) + ":0" + str(m_time_min) + ") " + p + ": " + random.choice(example_chats))
+            m_time_min += random.randint(0, 1)
+            m_time_min = min(m_time_min, 9)
+
+    synthetic_data_dict = {"meeting_title": meeting_title, 
+                           "meeting_time": meeting_time,
+                           "meeting_reoccuring": meeting_reoccuring,
+                           "attendees": attendees,
+                           "total_participants": total_participants,
+                           "work_category": work_category,
+                           "types_of_roles": types_of_roles,
+                           "attendee_punctuality": attendee_punctuality,
+                           "meeting_duration_analysis": meeting_duration_analysis,
+                           "chat_log": chat_log}
+
+    return synthetic_data_dict
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
