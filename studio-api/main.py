@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 from torch.utils.data import DataLoader
@@ -37,6 +37,14 @@ from transformers import (
 
 import random
 import librosa
+import uuid
+
+from firebase_admin import credentials, firestore, initialize_app
+# Initialize Firestore DB
+cred = credentials.Certificate('key.json')
+default_app = initialize_app(cred)
+db = firestore.client()
+meetings_ref = db.collection('meetings')
 
 #device = "cuda" if torch.cuda.is_available() else "cpu"
 #summarization_model = summarization_model.to(device)
@@ -280,6 +288,37 @@ def synthetic_data():
                            "chat_log": chat_log}
 
     return synthetic_data_dict
+
+@app.route("/uploadAndDoStuff", methods= ["POST"])
+def upload_and_do_stuff():
+    meeting_id = str(uuid.uuid4())
+    whisper_model = whisper.load_model("base")
+    audio_file = request.files['audio_file']
+    audio_file.save("temp.mp3")
+    transcript = whisper_model.transcribe("temp.mp3")["text"]
+
+    duration = int(librosa.get_duration(filename='temp.mp3')) // 60
+
+    output = {"transcript": transcript, "duration": duration}
+    meetings_ref.document(meeting_id).set(output)
+
+    # START SUMMARY
+    
+    output = summarize_local(transcript)
+    meetings_ref.document(meeting_id).update(output)
+
+    # START METRICS
+
+    output = metrics_local(transcript)
+    meetings_ref.document(meeting_id).update(output)
+
+    # START SYNTHETIC DATA
+    
+    output = synthetic_data_local(duration)
+    meetings_ref.document(meeting_id).update(output)
+
+    return jsonify({"success": True, "meeting_id": meeting_id}), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
