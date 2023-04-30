@@ -261,10 +261,10 @@ def synthetic_data_local(meeting_duration):
     
     # select some from each bucket... 1-3 per type
     attendees = {}
-    engineering_selected = random.choices(list(engineering.keys()), k=random.randint(1, 3))
-    product_selected = random.choices(list(product.keys()), k=random.randint(1, 3))
-    design_selected = random.choices(list(design.keys()), k=random.randint(1, 3))
-    management_selected = random.choices(list(management.keys()), k=random.randint(1, 3))
+    engineering_selected = random.sample(list(engineering.keys()), k=random.randint(1, 3))
+    product_selected = random.sample(list(product.keys()), k=random.randint(1, 3))
+    design_selected = random.sample(list(design.keys()), k=random.randint(1, 3))
+    management_selected = random.sample(list(management.keys()), k=random.randint(1, 3))
     for n in engineering_selected:
         attendees[n] = engineering[n]
     for n in product_selected:
@@ -312,6 +312,42 @@ def synthetic_data_local(meeting_duration):
             m_time_min += random.randint(0, 1)
             m_time_min = min(m_time_min, 9)
 
+    # action items
+    engineering_action_items = ["Conduct a code review for the new feature implementation.",
+                                "Investigate the reported bug and determine the root cause of the issue."
+                                "Write unit tests for the new API endpoint.",
+                                "Optimize the database query to improve performance.",
+                                "Update the API documentation with the latest changes.",
+                                "Refactor the legacy codebase to improve maintainability.",
+                                "Implement a caching layer to improve the application's performance.",
+                                "Investigate the feasibility of integrating a new third-party API.",
+                                "Evaluate different open-source libraries for the project's needs.",
+                                "Conduct load testing to ensure the application can handle high traffic volumes."]
+    design_action_items = ["Create wireframes for the new feature based on the user stories.",
+                           "Conduct a usability test with the existing UI design to identify areas of improvement.",
+                           "Create a style guide for the design system.",
+                           "Design the visual mockup for the landing page.",
+                           "Create design assets for the marketing team to use in the campaign.",
+                           "Develop a new brand identity for the company.",
+                           "Create user personas to better understand the target audience.",
+                           "Conduct a design sprint to ideate on new product features.",
+                           "Design an onboarding flow for new users.",
+                           "Develop a user research plan to gather qualitative data on the product."]
+    product_action_items = ["Conduct a competitive analysis to identify potential gaps in the market.",
+                            "Gather customer feedback on the existing product and prioritize the feature requests.",
+                            "Conduct a market research study to identify new market segments.",
+                            "Develop a product roadmap for the upcoming quarter.",
+                            "Create a user journey map to identify areas of improvement in the product experience.",
+                            "Analyze the customer acquisition funnel and identify areas of dropoff.",
+                            "Conduct a pricing analysis and recommend changes to pricing strategy.",
+                            "Create a go-to-market plan for the new feature release.",
+                            "Develop a user retention plan to increase engagement and reduce churn.",
+                            "Conduct user interviews to gather feedback on the new feature's usability."]
+
+    action_items_1 = random.sample(engineering_action_items, k=random.randint(2, 4))
+    action_items_2 = random.sample(design_action_items, k=random.randint(2, 4))
+    action_items_3 = random.sample(product_action_items, k=random.randint(2, 4))
+    
     synthetic_data_dict = {"meeting_title": meeting_title, 
                            "meeting_time": meeting_time,
                            "meeting_reoccuring": meeting_reoccuring,
@@ -321,6 +357,9 @@ def synthetic_data_local(meeting_duration):
                            "types_of_roles": types_of_roles,
                            "attendee_punctuality": attendee_punctuality,
                            "meeting_duration_analysis": meeting_duration_analysis,
-                           "chat_log": chat_log}
+                           "chat_log": chat_log,
+                           "engineering_action_items": action_items_1,
+                           "design_action_items": action_items_2,
+                           "product_action_items": action_items_3}
 
     return synthetic_data_dict
