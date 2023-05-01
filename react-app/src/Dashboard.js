@@ -30,7 +30,7 @@ function Dashboard() {
         </div>
         <div className="navbar-section">
           <div className="navbar-user">
-            <button onClick={sendEmail} style={{backgroundColor: '#1B73E8', borderColor: '#1B73E8', borderRadius: 10, fontSize: 20, color:'white', height: 55, width: 150, marginRight: 10}}>Share</button>
+            <button onClick={sendEmail} style={{backgroundColor: '#1B73E8', borderColor: '#1B73E8', borderRadius: 10, fontSize: 20, color:'white', height: 55, width: 150, marginRight: 10, font: 'Roboto'}}>Share</button>
             <div className="navbar-user-profile"></div>
           </div>
         </div>
@@ -78,12 +78,12 @@ function Dashboard() {
           <CardImg title="Attendees" content={<img style={{marginLeft:"auto", marginRight:"auto",display: "flex", justifyContent: 'center'}} src={attendeesImage} alt=''></img>}/>
 
           <div className="dashboard-metrics">
-            <Metrics title="Attendee Punctuality ⓘ" content={
+            <Metrics title="Attendee Punctuality 🛈" content={
             <>
             <h1>2 <img src={delta1} alt=''></img></h1>
             <p>late by 10 min</p>
             </>} />
-            <Metrics title="Meeting Duration ⓘ" content={
+            <Metrics title="Meeting Duration 🛈" content={
             <>
             <h1>5% <img src={delta2} alt=''></img> </h1>
             <p>over by 3 min</p>
@@ -91,8 +91,8 @@ function Dashboard() {
               } />
           </div>
           <div className="dashboard-metrics">
-            <Metrics title="Filler Words ⓘ" content={<h1>14 <img src={delta3} alt=''></img></h1>} />
-            <Metrics title="Jargon Words ⓘ" content={<h1>8 <img src={delta4} alt=''></img></h1>} />
+            <Metrics title="Filler Words 🛈" content={<h1>14 <img src={delta3} alt=''></img></h1>} />
+            <Metrics title="Jargon Words 🛈" content={<h1>8 <img src={delta4} alt=''></img></h1>} />
           </div>
         </div>
       </div>

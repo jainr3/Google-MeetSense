@@ -52,19 +52,6 @@
     margin-right: 40px;
     margin-left: 30px;
   }
-
-  .navbar-button {
-    border: none;
-    color: white;
-    background-color: #1B73E8;
-    text-align: center;
-    display: inline-block;
-    padding: 14px 42px;
-    border-radius: 8px;
-    font: 'Roboto';
-    font-size: 20;
-    font-weight: 500;
-  }
   
   .dashboard-content {
     display: flex;
