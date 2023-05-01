@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Card.css';
+import './Metrics.css';
 
-const Card = ({ title, content }) => {
+const Metrics = ({ title, content }) => {
   return (
-    <div className="card">
-      <div className="card-header">{title}</div>
-      <div className="card-body">
-        <div className="card-body-main">
+    <div className="metrics">
+      <div className="metrics-header">{title}</div>
+      <div className="metrics-body">
+        <div className="metrics-body-main">
             {content}
             </div>
         </div>
@@ -15,10 +15,10 @@ const Card = ({ title, content }) => {
   );
 };
 
-Card.propTypes = {
+Metrics.propTypes = {
   title: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
-export default Card;
+export default Metrics;
 
