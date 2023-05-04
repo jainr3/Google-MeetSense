@@ -59,9 +59,9 @@ function Dashboard() {
     getMeeting();
   }, [])
 
-  
+
   function sendEmail() {
-    window.open('mailto:zz753@cornell.edu; kk828@cornell.edu; rj299@cornell.edu; qjc2@cornell.edu?subject=Team Rise Sync: Design Update&body={Body%20goes%20here}');
+    window.open('mailto:dummy1@gmail.com; dummy2@gmail.com; dummy3@gmail.com?subject=Team Rise Sync: Design Update&body=Design Action Items%0D%0A%0D%0A• ' + theMeeting.design_action_items.toString().replace(",", '%0D%0A• ') + '%0D%0A%0D%0AEngineering Action Items%0D%0A%0D%0A• ' + theMeeting.engineering_action_items.toString().replace(",", '%0D%0A• ') + '%0D%0A%0D%0AProduct Action Items%0D%0A%0D%0A• ' + theMeeting.product_action_items.toString().replace(",", '%0D%0A• '));
   }
 
   return (
@@ -147,8 +147,18 @@ function Dashboard() {
               } />
             </div>
             <div className="dashboard-metrics">
-              <Metrics title="Filler Words 🛈" content={<h1>{theMeeting.filler_words_total} <img src={delta3} alt=''></img></h1>} />
-              <Metrics title="Jargon Words 🛈" content={<h1>{theMeeting.jargon_total} <img src={delta4} alt=''></img></h1>} />
+              <Metrics title="Filler Words 🛈" content={
+                <>
+                  <h1>{theMeeting.filler_words_total} <img src={delta3} alt=''></img></h1>
+                  <p>{theMeeting.top_filler_words}</p>
+                </>
+              } />
+              <Metrics title="Jargon Words 🛈" content={
+                <>
+                  <h1>{theMeeting.jargon_total} <img src={delta4} alt=''></img></h1>
+                  <p>{theMeeting.top_jargon_words}</p>
+                </>
+              } />
             </div>
           </div>
         </div>
