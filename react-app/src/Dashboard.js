@@ -96,8 +96,8 @@ function Dashboard() {
                 title="Overview"
                 content={
                   <>
-                    <h2>Team Rise Sync: Design Update</h2>
-                    <p>Date: 4/15/32 &emsp;Time: 2:00-3:03PM&emsp; EST Duration: 63 min&emsp; Recurring: No</p>
+                    <h2>Engineering Key Review</h2>
+                    <p>Date: 4/15/23 &emsp;Time: 2:00-3:00PM&emsp; Duration: 63 min&emsp; Recurring: No</p>
                   </>
                 }
               />
@@ -137,12 +137,12 @@ function Dashboard() {
               <Metrics title="Attendee Punctuality 🛈" content={
                 <>
                   <h1>2 <img src={delta1} alt=''></img></h1>
-                  <p>late by 10 min</p>
+                  <p>people late by 10 min</p>
                 </>} />
               <Metrics title="Meeting Duration 🛈" content={
                 <>
                   <h1>5% <img src={delta2} alt=''></img> </h1>
-                  <p>over by 3 min</p>
+                  <p>over expected meeting duration</p>
                 </>
               } />
             </div>
