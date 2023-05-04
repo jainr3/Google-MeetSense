@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { db, storage } from "./firebase";
 import { getDocs, collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 
+
 function Dashboard() {
   const [meetingList, setMeetingList] = useState([]);
   const [theMeeting, setTheMeeting] = useState([]);
@@ -57,6 +58,11 @@ function Dashboard() {
   useEffect(() => {
     getMeeting();
   }, [])
+
+  
+  function sendEmail() {
+    window.open('mailto:zz753@cornell.edu; kk828@cornell.edu; rj299@cornell.edu; qjc2@cornell.edu?subject=Team Rise Sync: Design Update&body={Body%20goes%20here}');
+  }
 
   return (
 
@@ -141,8 +147,8 @@ function Dashboard() {
               } />
             </div>
             <div className="dashboard-metrics">
-              <Metrics title="Filler Words 🛈" content={<h1>14 <img src={delta3} alt=''></img></h1>} />
-              <Metrics title="Jargon Words 🛈" content={<h1>8 <img src={delta4} alt=''></img></h1>} />
+              <Metrics title="Filler Words 🛈" content={<h1>{theMeeting.filler_words_total} <img src={delta3} alt=''></img></h1>} />
+              <Metrics title="Jargon Words 🛈" content={<h1>{theMeeting.jargon_total} <img src={delta4} alt=''></img></h1>} />
             </div>
           </div>
         </div>
@@ -155,8 +161,8 @@ function Dashboard() {
   );
 }
 
-function sendEmail() {
-  window.open('mailto:zz753@cornell.edu; kk828@cornell.edu; rj299@cornell.edu; qjc2@cornell.edu?subject=Team Rise Sync: Design Update&body={Body%20goes%20here}');
-}
+// function sendEmail() {
+//  window.open('mailto:zz753@cornell.edu; kk828@cornell.edu; rj299@cornell.edu; qjc2@cornell.edu?subject=Team Rise Sync: Design Update&body={Body%20goes%20here}');
+//}
 
 export default Dashboard;
