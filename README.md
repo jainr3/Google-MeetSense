@@ -50,9 +50,7 @@
 
 Google MeetSense was created to answer the following question:
 
-```
-How might we ensure that meeting organizers have a clear understanding of how to move forward after virtual medium-sized meetings?
-```
+**How might we ensure that meeting organizers have a clear understanding of how to move forward after virtual medium-sized meetings?**
 
 Over the course of five months our team has worked to create a prototype application that demonstrates the vision for a tool that could provide a post-meeting summary, action items, and other metrics to meeting organizers. During this time, we have received feedback from a team in Google's Corporate Engineering division, our BigCo studio instructors, peers, and others. We have conducted numerous interviews to guide our thinking toward this demo application. The result is a combination of a Figma mockup, an API that processes an audio file of a real meeting to produce a real meeting summary and statistics, and a front-end application that displays this information.
 
@@ -69,11 +67,11 @@ A demo video of the ideal usage of the product is shown below. It shows what our
 
 ### Built With
 
-* <a href="https://reactjs.org/"><img src="img/react.png" height="30"></a>
-* <a href="https://huggingface.co/"><img src="img/hf-logo-with-title.png" height="30" ></a>
-* <a href="https://colab.research.google.com/"><img src="img/colab_favicon_256px.png" height="30" ></a>
-* <a href="https://flask.palletsprojects.com/en/2.3.x/"><img src="img/flask-horizontal.png" height="30" ></a>
-* <a href="https://pytorch.org/"><img src="img/pytorch.png" height="30" ></a>
+* <a href="https://reactjs.org/"><img src="img/react.png" height="40"></a>
+* <a href="https://huggingface.co/"><img src="img/hf-logo-with-title.png" height="40" ></a>
+* <a href="https://colab.research.google.com/"><img src="img/colab_favicon_256px.png" height="40" ></a>
+* <a href="https://flask.palletsprojects.com/en/2.3.x/"><img src="img/flask-horizontal.png" height="40" ></a>
+* <a href="https://pytorch.org/"><img src="img/pytorch.png" height="40" ></a>
 
 <p align="right">[<a href="#readme-top">Back to Top</a>]</p>
 
