@@ -214,7 +214,14 @@ def metrics_local(text):
 
     jargon_counts = dict(sorted(jargon_counts.items(), key=lambda x: x[1], reverse=True))
 
-    return {'filler_words': overall_filler_words_counts, 'jargon': jargon_counts, "filler_words_total": sum(overall_filler_words_counts.values()), "jargon_total": sum(jargon_counts.values())}
+    # return top 3 for each for easy displaying
+    temp = [str(x[0]) + ": " + str(x[1]) for x in list(overall_filler_words_counts.items())[:3]]
+    top_filler_words = ', '.join(temp)
+    temp = [str(x[0]) + ": " + str(x[1]) for x in list(jargon_counts.items())[:3]]
+    top_jargon_words = ', '.join(temp)
+
+    return {'filler_words': overall_filler_words_counts, 'jargon': jargon_counts, "filler_words_total": sum(overall_filler_words_counts.values()), "jargon_total": sum(jargon_counts.values()),
+            'top_filler_words': top_filler_words, 'top_jargon_words': top_jargon_words}
 
 def synthetic_data_local(meeting_duration):
     possible_meeting_titles = ["Strategy Session", "Brainstorming Meeting", "Project Planning Meeting",
@@ -347,6 +354,10 @@ def synthetic_data_local(meeting_duration):
     action_items_1 = random.sample(engineering_action_items, k=random.randint(2, 4))
     action_items_2 = random.sample(design_action_items, k=random.randint(2, 4))
     action_items_3 = random.sample(product_action_items, k=random.randint(2, 4))
+
+    action_items_1 = [" " + x if i != 0 else x for i, x in enumerate(action_items_1)]
+    action_items_2 = [" " + x if i != 0 else x for i, x in enumerate(action_items_1)]
+    action_items_3 = [" " + x if i != 0 else x for i, x in enumerate(action_items_1)]
     
     synthetic_data_dict = {"meeting_title": meeting_title, 
                            "meeting_time": meeting_time,
