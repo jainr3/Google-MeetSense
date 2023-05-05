@@ -1,7 +1,6 @@
 <a name="readme-top"></a>
 
 [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Cornell License][license-shield]][license-url]
 
@@ -51,7 +50,9 @@
 
 Google MeetSense was created to answer the following question:
 
-`"How might we ensure that meeting organizers have a clear understanding of how to move forward after virtual medium-sized meetings?"`
+```
+How might we ensure that meeting organizers have a clear understanding of how to move forward after virtual medium-sized meetings?
+```
 
 Over the course of five months our team has worked to create a prototype application that demonstrates the vision for a tool that could provide a post-meeting summary, action items, and other metrics to meeting organizers. During this time, we have received feedback from a team in Google's Corporate Engineering division, our BigCo studio instructors, peers, and others. We have conducted numerous interviews to guide our thinking toward this demo application. The result is a combination of a Figma mockup, an API that processes an audio file of a real meeting to produce a real meeting summary and statistics, and a front-end application that displays this information.
 
@@ -143,13 +144,8 @@ Project Link: [https://github.com/jainr3/Google-MeetSense](https://github.com/ja
 
 <p align="right">[<a href="#readme-top">Back to Top</a>]</p>
 
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/jainr3/Google-MeetSense.svg?style=for-the-badge
 [contributors-url]: https://github.com/jainr3/Google-MeetSense/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/jainr3/Google-MeetSense.svg?style=for-the-badge
-[forks-url]: https://github.com/jainr3/Google-MeetSense/network/members
 [stars-shield]: https://img.shields.io/github/stars/jainr3/Google-MeetSense.svg?style=for-the-badge
 [stars-url]: https://github.com/jainr3/Google-MeetSense/stargazers
 [license-shield]: https://img.shields.io/badge/LICENSE-Cornell%20Standard%20Project%20Agreement-red
