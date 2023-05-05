@@ -61,7 +61,7 @@ function Dashboard() {
 
 
   function sendEmail() {
-    window.open('mailto:dummy1@gmail.com; dummy2@gmail.com; dummy3@gmail.com?subject=Team Rise Sync: Design Update&body=Design Action Items%0D%0A%0D%0A• ' + theMeeting.design_action_items.toString().replace(",", '%0D%0A• ') + '%0D%0A%0D%0AEngineering Action Items%0D%0A%0D%0A• ' + theMeeting.engineering_action_items.toString().replace(",", '%0D%0A• ') + '%0D%0A%0D%0AProduct Action Items%0D%0A%0D%0A• ' + theMeeting.product_action_items.toString().replace(",", '%0D%0A• '));
+    window.open('mailto:dummy1@gmail.com; dummy2@gmail.com; dummy3@gmail.com?subject=Engineering Key Review&body=Design Action Items%0D%0A%0D%0A• ' + theMeeting.design_action_items.toString().replace(",", '%0D%0A• ') + '%0D%0A%0D%0AEngineering Action Items%0D%0A%0D%0A• ' + theMeeting.engineering_action_items.toString().replace(",", '%0D%0A• ') + '%0D%0A%0D%0AProduct Action Items%0D%0A%0D%0A• ' + theMeeting.product_action_items.toString().replace(",", '%0D%0A• '));
   }
 
   return (
